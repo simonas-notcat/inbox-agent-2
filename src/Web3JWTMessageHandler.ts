@@ -70,18 +70,18 @@ export class Web3JwtMessageHandler extends AbstractMessageHandler {
           // Fix signing output
           delete w3c_vc.proof
 
-          // Verify Typed Web3 Signature:
-          const signingAddress = verifyTypedData(getDomain(1), getEIP712Schema(), w3c_vc, decoded.signature.slice(4))
+          // // Verify Typed Web3 Signature:
+          // const signingAddress = verifyTypedData(getDomain(1), getEIP712Schema(), w3c_vc, decoded.signature.slice(4))
 
-          // You need this for local development because of Opensea Rate limiting
-          //await new Promise(r => setTimeout(r, 1000));
+          // // You need this for local development because of Opensea Rate limiting
+          // //await new Promise(r => setTimeout(r, 1000));
 
-          // Check SigningAddress against issuer did:
-          const didUrl = w3c_vc.issuer?.id?.toLowerCase()
-          const didDoc = await context.agent.resolveDid( { didUrl } )
+          // // Check SigningAddress against issuer did:
+          // const didUrl = w3c_vc.issuer?.id?.toLowerCase()
+          // const didDoc = await context.agent.resolveDid( { didUrl } )
 
-          // check signing Address
-          checkSigningAddressInDidDoc(signingAddress, didDoc)
+          // // check signing Address
+          // checkSigningAddressInDidDoc(signingAddress, didDoc)
 
           message.addMetaData({ type: decoded.header.typ || 'JWT', value: decoded.header.alg })
           message.data = decoded.payload
