@@ -25,10 +25,6 @@
       "SECRET_KEY": {
         "description": "Secret key for database encryption",
         "generator": "secret"
-      },
-      "AGENT_ENDPOINT": {
-        "description": "Prefix for agent endpoints",
-        "value": "/agent"
       }
     }
   }
