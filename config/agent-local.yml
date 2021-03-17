@@ -1,7 +1,7 @@
 version: 2.0
 
 constants:
-  baseUrl: https://e23152b060bc.ngrok.io
+  baseUrl: https://b8da91a396e4.ngrok.io
   port: 3332
   secretKey: 29739248cad1bd1a0fc4d9b75cd4d2990de535baf5caadfdf8d8f86664aa830c
   databaseFile: ./db/database.sqlite
@@ -51,22 +51,6 @@ constants:
     - getVerifiableCredentialsForSdr
     - validatePresentationAgainstSdr
 
-  publicMethods:
-    - resolveDid
-    - dataStoreGetMessage
-    - dataStoreGetVerifiableCredential
-    - dataStoreGetVerifiablePresentation
-    - dataStoreORMGetIdentifiers
-    - dataStoreORMGetIdentifiersCount
-    - dataStoreORMGetMessages
-    - dataStoreORMGetMessagesCount
-    - dataStoreORMGetVerifiableCredentialsByClaims
-    - dataStoreORMGetVerifiableCredentialsByClaimsCount
-    - dataStoreORMGetVerifiableCredentials
-    - dataStoreORMGetVerifiableCredentialsCount
-    - dataStoreORMGetVerifiablePresentations
-    - dataStoreORMGetVerifiablePresentationsCount
-
 # Data base
 dbConnection:
   $require: typeorm?t=function#createConnection
@@ -89,14 +73,6 @@ server:
     # CORS
     - - $require: 'cors'
 
-    # Frontend app
-    - - /
-      - $require: express?t=function#static
-        $args:
-          - ./app/build
-          - index: false
-
-
 
     # Add agent to the request object
     - - $require: '@veramo/remote-server?t=function#RequestWithAgentRouter'
@@ -108,7 +84,7 @@ server:
     - - $require: '@veramo/remote-server?t=function#WebDidDocRouter'
 
     # Messaging endpoint
-    - - /messaging
+    - - /
       - $require: '@veramo/remote-server?t=function#MessagingRouter'
         $args:
           - metaData:
@@ -136,39 +112,6 @@ server:
             exposedMethods:
               $ref: /constants/methods
 
-    # Public API base path
-    - - /public-agent
-      - $require: '@veramo/remote-server?t=function#RequestWithAgentRouter'
-        $args:
-          - agent:
-              $ref: /publicAgent
-      - $require: '@veramo/remote-server?t=function#AgentRouter'
-        $args:
-          - exposedMethods:
-              $ref: /constants/publicMethods
-
-    # Open API schema
-    - - /public-api
-      - $require: '@veramo/remote-server?t=function#ApiSchemaRouter'
-        $args:
-          - basePath: /public-agent
-            apiName: Pulsar
-            apiVersion: '1.0.0'
-            exposedMethods:
-              $ref: /constants/publicMethods
-
-    # Swagger docs
-    - - /public-api-docs
-      - $require: swagger-ui-express?t=object#serve
-      - $require: swagger-ui-express?t=function#setup
-        $args:
-          - null
-          - swaggerOptions:
-              url: '/api'
-
-    # Frontend app
-    - - '/'
-      - $require: './build/spa-router?t=function#SpaRouter'
 
   # Execute during server initialization
   init:
@@ -178,7 +121,7 @@ server:
             $ref: /agent
           baseUrl:
             $ref: /constants/baseUrl
-          messagingServiceEndpoint: /messaging
+          messagingServiceEndpoint: /
 
 # Message handler plugin
 messageHandler:
@@ -349,18 +292,3 @@ agent:
           $args:
             - $ref: /dbConnection
 
-# Public Agent
-publicAgent:
-  $require: '@veramo/core#Agent'
-  $args:
-    - schemaValidation: false
-      enabledMethods:
-        $ref: /constants/publicMethods
-      plugins:
-        - $ref: /didResolver
-        - $require: '@veramo/data-store#DataStore'
-          $args:
-            - $ref: /dbConnection
-        - $require: '@veramo/data-store#DataStoreORM'
-          $args:
-            - $ref: /dbConnection

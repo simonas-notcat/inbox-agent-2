@@ -10,25 +10,17 @@
     ],
     "addons": ["heroku-postgresql:hobby-dev"],
     "env": {
-      "REACT_APP_BASE_URL": {
+      "BASE_URL": {
         "description": "The url for which your DID will be based on",
         "value": "https://appname.herokuapp.com"
       },
-      "REACT_APP_DEFAULT_RECIPIENT": {
-        "description": "DID of the default recipient",
-        "value": "did:web:appname.herokuapp.com"
-      },
       "API_NAME": {
         "description": "Open API name",
-        "value": "Pulsar"
+        "value": "Simonas inbox"
       },
       "API_KEY": {
         "description": "A secret key for verifying requests",
         "generator": "secret"
-      },
-      "PUBLIC_API_NAME": {
-        "description": "Open API name",
-        "value": "Pulsar Public"
       },
       "SECRET_KEY": {
         "description": "Secret key for database encryption",
